@@ -42,7 +42,7 @@ public class AutosController {
      * @return Auto Object
      */
     @GetMapping("/api/autos/{id}")
-    @Operation(summary = "Find a autos by ID")
+    @Operation(summary = "Find an autos by ID")
     public ResponseEntity<Auto> findOneByID(@Parameter(description = "Long type Param.") @PathVariable Long id) {
 
         if (auRepo.count() == 0) {
@@ -67,4 +67,50 @@ public class AutosController {
         log.warn("That Auto is already exists");
         return ResponseEntity.badRequest().build();
     }
+
+    /**
+     * Method for update an auto
+     * @return Response Entity of Auto
+     */
+    @PutMapping("/api/autos")
+    @Operation(summary = "Update a car")
+    public ResponseEntity<Auto> updAuto(@RequestBody Auto auto) {
+        if (auto.getId() == null) {
+            log.warn("Error, please insert an ID");
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(auRepo.save(auto));
+    }
+
+    /**
+     * Method for delete an auto
+     * @return Response Entity of Auto
+     */
+    @DeleteMapping("/api/autos/{id}")
+    @Operation(summary = "Delete an auto by id")
+    public ResponseEntity<Auto> deleteAuto(@Parameter(description = "id Long type") @PathVariable Long id) {
+        if(id <= 0) {
+            return ResponseEntity.badRequest().build();
+        }
+        if(auRepo.existsById(id)) {
+            auRepo.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Method for delete all autos
+     * @return Response Entity of String param
+     */
+    @DeleteMapping("/api/autos")
+    @Operation(summary = "Delete all autos")
+    public ResponseEntity<String> deleteAll() {
+        if (auRepo.count() == 0) {
+            return ResponseEntity.noContent().build();
+        }
+        auRepo.deleteAll();
+        return ResponseEntity.ok("Ok, the bd has been deleted");
+    }
+
 }
