@@ -43,4 +43,27 @@ public class HeladeriaService {
         }
         return ResponseEntity.badRequest().build();
     }
+
+    public ResponseEntity<Helado> updateOneByID(Helado helado) {
+        if (helado.getId() != null) {
+            return ResponseEntity.ok(heladeriaRepository.save(helado));
+        }
+        log.warn("Id can´t isn´t null.");
+        return ResponseEntity.notFound().build();
+    }
+    public ResponseEntity<List<Helado>> deleteById(Long id) {
+        heladeriaRepository.deleteById(id);
+        if (heladeriaRepository.count() == 0) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(heladeriaRepository.findAll());
+    }
+
+    public ResponseEntity<String> deleteAll() {
+        if (heladeriaRepository.count() == 0) {
+            return ResponseEntity.noContent().build();
+        }
+        heladeriaRepository.deleteAll();
+        return ResponseEntity.ok("Ok, list of Helados is empty.");
+    }
 }

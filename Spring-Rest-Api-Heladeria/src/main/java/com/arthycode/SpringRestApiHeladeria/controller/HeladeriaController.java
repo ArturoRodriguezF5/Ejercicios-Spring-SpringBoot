@@ -39,4 +39,22 @@ public class HeladeriaController {
         return heladeriaService.addNew(helado);
     }
 
+    @PutMapping("/update")
+    @Operation(summary = "Update a Helado in the BD")
+    public ResponseEntity<Helado> update(@Parameter(description = "Helado Parameter") @RequestBody Helado helado) {
+        return heladeriaService.updateOneByID(helado);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @Operation(summary = "Delete a Helado in the BD")
+    public ResponseEntity<List<Helado>> deleteById(@Parameter(description = "Type Long") @PathVariable Long id) {
+        return heladeriaService.deleteById(id);
+    }
+
+    @DeleteMapping("/delete")
+    @Operation(summary = "Delete Helado List.")
+    public ResponseEntity<String> deleteAll() {
+        return heladeriaService.deleteAll();
+    }
+
 }
